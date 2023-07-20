@@ -154,7 +154,7 @@ def load_vocoder(ckpt_vocoder: str, eval_mode: bool):
 
     return {'model': vocoder}
 
-def load_feature_extractor(gpu, eval_mode=True):
+def load_feature_extractor(gpu, lib_path, eval_mode=True):
     s = '''
     feature_extractor:
         target: evaluation.feature_extractors.melception.Melception
@@ -183,12 +183,17 @@ def load_feature_extractor(gpu, eval_mode=True):
         feat_extractor_cfg.feature_extractor, pl_sd['model'], gpu=gpu, eval_mode=eval_mode)['model']
 
     if feat_extractor_cfg.transform_dset_out_to_inception_in is not None:
-        transforms = [instantiate_from_config(c) for c in feat_extractor_cfg.transform_dset_out_to_inception_in]
+        transforms = []
+        for c in feat_extractor_cfg.transform_dset_out_to_inception_in:
+            if c['target'] == 'specvqgan.modules.losses.vggishish.transforms.StandardNormalizeAudio':
+                c['params']['specs_dir'] = os.path.join(lib_path, c['params']['specs_dir'])
+                c['params']['cache_path'] = os.path.join(lib_path, c['params']['cache_path'])
+            transforms.append(instantiate_from_config(c))
     else:
         transforms = [lambda x: x]
     transforms = torchvision.transforms.Compose(transforms)
 
-    vggsound_meta = list(csv.reader(open('./data/vggsound.csv'), quotechar='"'))
+    vggsound_meta = list(csv.reader(open(os.path.join(lib_path, './data/vggsound.csv')), quotechar='"'))
     unique_classes = sorted(list(set(row[2] for row in vggsound_meta)))
     label2target = {label: target for target, label in enumerate(unique_classes)}
     target2label = {target: label for label, target in label2target.items()}

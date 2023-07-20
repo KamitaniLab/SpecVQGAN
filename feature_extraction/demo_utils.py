@@ -114,6 +114,11 @@ def reencode_video_with_diff_fps(video_path: str, tmp_path: str, extraction_fps:
 
 def maybe_download_model(model_name: str, log_dir: str) -> str:
     name2info = {
+        '2022-10-28T10-52-39_transformer_5_3_final': {
+            'info': 'conv5_3 trained model',
+            'hash': '',
+            'link': '',
+        },
         '2021-06-20T16-35-20_vggsound_transformer': {
             'info': 'No Feats',
             'hash': 'b1f9bb63d831611479249031a1203371',
@@ -185,7 +190,7 @@ def load_config(model_dir: str):
             config.data.params[a] = os.path.join(base_path, Path(config.data.params[a]).name)
     return config
 
-def load_model(model_name, log_dir, device):
+def load_model(model_name, log_dir, lib_path, device):
     to_use_gpu = True if device.type == 'cuda' else False
     model_dir = maybe_download_model(model_name, log_dir)
     config = load_config(model_dir)
@@ -198,11 +203,11 @@ def load_model(model_name, log_dir, device):
 
     # aux models (vocoder and melception)
     ckpt_melgan = config.lightning.callbacks.image_logger.params.vocoder_cfg.params.ckpt_vocoder
-    melgan = load_vocoder(ckpt_melgan, eval_mode=True)['model'].to(device)
-    melception = load_feature_extractor(to_use_gpu, eval_mode=True)
+    melgan = load_vocoder(os.path.join(lib_path, ckpt_melgan), eval_mode=True)['model'].to(device)
+    melception = load_feature_extractor(to_use_gpu, lib_path, eval_mode=True)
     return config, sampler, melgan, melception
 
-def load_neural_audio_codec(model_name, log_dir, device):
+def load_neural_audio_codec(model_name, log_dir, lib_path, device):
     model_dir = maybe_download_model(model_name, log_dir)
     config = load_config(model_dir)
 
@@ -212,7 +217,7 @@ def load_neural_audio_codec(model_name, log_dir, device):
     model = model.to(device)
     model = model.eval()
     model.train = disabled_train
-    vocoder = load_vocoder(Path('./vocoder/logs/vggsound/'), eval_mode=True)['model'].to(device)
+    vocoder = load_vocoder(os.path.join(lib_path, './vocoder/logs/vggsound/'), eval_mode=True)['model'].to(device)
     return config, model, vocoder
 
 class LeftmostCropOrTile(object):
