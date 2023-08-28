@@ -114,47 +114,11 @@ def reencode_video_with_diff_fps(video_path: str, tmp_path: str, extraction_fps:
 
 def maybe_download_model(model_name: str, log_dir: str) -> str:
     name2info = {
-        '2022-10-28T10-52-39_transformer_5_3_final': {
+        '2023-08-17T23-12-12_transformer_5_3_final': {
             'info': 'conv5_3 trained model',
             'hash': '',
             'link': '',
         },
-        '2021-06-20T16-35-20_vggsound_transformer': {
-            'info': 'No Feats',
-            'hash': 'b1f9bb63d831611479249031a1203371',
-            'link': 'https://a3s.fi/swift/v1/AUTH_a235c0f452d648828f745589cde1219a'
-                    '/specvqgan_public/models/2021-06-20T16-35-20_vggsound_transformer.tar.gz',
-        },
-        '2021-07-30T21-03-22_vggsound_transformer': {
-            'info': '1 ResNet50 Feature',
-            'hash': '27a61d4b74a72578d13579333ed056f6',
-            'link': 'https://a3s.fi/swift/v1/AUTH_a235c0f452d648828f745589cde1219a'
-                    '/specvqgan_public/models/2021-07-30T21-03-22_vggsound_transformer.tar.gz',
-        },
-        '2021-07-30T21-34-25_vggsound_transformer': {
-            'info': '5 ResNet50 Features',
-            'hash': 'f4d7105811589d441b69f00d7d0b8dc8',
-            'link': 'https://a3s.fi/swift/v1/AUTH_a235c0f452d648828f745589cde1219a'
-                    '/specvqgan_public/models/2021-07-30T21-34-25_vggsound_transformer.tar.gz',
-        },
-        '2021-07-30T21-34-41_vggsound_transformer': {
-            'info': '212 ResNet50 Features',
-            'hash': 'b222cc0e7aeb419f533d5806a08669fe',
-            'link': 'https://a3s.fi/swift/v1/AUTH_a235c0f452d648828f745589cde1219a'
-                    '/specvqgan_public/models/2021-07-30T21-34-41_vggsound_transformer.tar.gz',
-        },
-        '2021-06-03T00-43-28_vggsound_transformer': {
-            'info': 'Class Label',
-            'hash': '98a3788ab973f1c3cc02e2e41ad253bc',
-            'link': 'https://a3s.fi/swift/v1/AUTH_a235c0f452d648828f745589cde1219a'
-                    '/specvqgan_public/models/2021-06-03T00-43-28_vggsound_transformer.tar.gz',
-        },
-        '2021-05-19T22-16-54_vggsound_codebook': {
-            'info': 'VGGSound Codebook',
-            'hash': '7ea229427297b5d220fb1c80db32dbc5',
-            'link': 'https://a3s.fi/swift/v1/AUTH_a235c0f452d648828f745589cde1219a'
-                    '/specvqgan_public/models/2021-05-19T22-16-54_vggsound_codebook.tar.gz',
-        }
     }
     print(f'Using: {model_name} ({name2info[model_name]["info"]})')
     model_dir = os.path.join(log_dir, model_name)
