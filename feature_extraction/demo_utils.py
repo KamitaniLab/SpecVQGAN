@@ -119,19 +119,46 @@ def maybe_download_model(model_name: str, log_dir: str) -> str:
             'hash': '',
             'link': '',
         },
+        '2023-11-16T15-43-27_transformer_1_1_final': {
+            'info': 'conv1_1 trained model',
+            'hash': '',
+            'link': '',
+        },
+        '2023-11-16T15-42-33_transformer_2_1_final': {
+            'info': 'conv2_1 trained model',
+            'hash': '',
+            'link': '',
+        },
+        '2023-11-16T15-41-57_transformer_3_1_final': {
+            'info': 'conv3_1 trained model',
+            'hash': '',
+            'link': '',
+        },
+        '2023-11-16T15-41-28_transformer_4_1_final': {
+            'info': 'conv4_1 trained model',
+            'hash': '',
+            'link': '',
+        },
+        '2023-09-01T10-35-12_transformer_fc3_final': {
+            'info': 'fc3 trained model',
+            'hash': '',
+            'link': '',
+        },
     }
     print(f'Using: {model_name} ({name2info[model_name]["info"]})')
     model_dir = os.path.join(log_dir, model_name)
+    print('model_dir:', model_dir)
     if not os.path.exists(model_dir):
-        tar_local_path = os.path.join(log_dir, f'{model_name}.tar.gz')
-        # check if tar already exists and its md5sum
-        if not os.path.exists(tar_local_path) or md5_hash(tar_local_path) != name2info[model_name]['hash']:
-            down_link = name2info[model_name]['link']
-            download(down_link, tar_local_path)
-            print('Unpacking', tar_local_path, 'to', log_dir)
-            shutil.unpack_archive(tar_local_path, log_dir)
-            # clean-up space as we already have unpacked folder
-            os.remove(tar_local_path)
+        raise RuntimeError("The trained model has not been downloaded yet. Please follow the README and download first.")
+        # tar_local_path = os.path.join(log_dir, f'{model_name}.tar.gz')
+        # # check if tar already exists and its md5sum
+        # if not os.path.exists(tar_local_path) or md5_hash(tar_local_path) != name2info[model_name]['hash']:
+        #     down_link = name2info[model_name]['link']
+        #     download(down_link, tar_local_path)
+        #     print('Unpacking', tar_local_path, 'to', log_dir)
+        #     shutil.unpack_archive(tar_local_path, log_dir)
+        #     # clean-up space as we already have unpacked folder
+        #     os.remove(tar_local_path)
     return model_dir
 
 def load_config(model_dir: str):
